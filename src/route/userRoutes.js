@@ -5,7 +5,7 @@ const {
   updateAddress,
   deleteAddress
 } = require('../controller/userController');
-const { auth } = require('../middleware/Auth');
+const { auth } = require('../middleware/auth');
 
 const router = express.Router();
 

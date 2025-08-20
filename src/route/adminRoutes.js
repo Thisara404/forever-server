@@ -11,7 +11,7 @@ const {
   updateProduct, 
   deleteProduct 
 } = require('../controller/productController');
-const { adminAuth } = require('../middleware/Auth');
+const { adminAuth } = require('../middleware/auth');
 const { uploadMultiple } = require('../middleware/upload');
 const { validateProduct } = require('../utils/validation');
 const parseFormData = require('../middleware/parseFormData');

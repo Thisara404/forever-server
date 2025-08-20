@@ -7,7 +7,7 @@ const {
   cancelOrder,
   getAllOrders
 } = require('../controller/orderController');
-const { auth, adminAuth } = require('../middleware/Auth');
+const { auth, adminAuth } = require('../middleware/auth');
 const { validateOrder } = require('../utils/validation');
 
 const router = express.Router();

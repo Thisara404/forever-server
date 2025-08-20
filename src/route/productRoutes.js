@@ -8,7 +8,7 @@ const {
   getCategories,
   getFeaturedProducts
 } = require('../controller/productController');
-const { auth, adminAuth } = require('../middleware/Auth');
+const { auth, adminAuth } = require('../middleware/auth');
 const { uploadMultiple, handleUploadError } = require('../middleware/upload');
 const { validateProduct } = require('../utils/validation');
 const parseFormData = require('../middleware/parseFormData');
