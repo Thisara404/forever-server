@@ -3,8 +3,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const connectDB = require('./config/db');
-const errorHandler = require('./middleware/errorHandler');
+const connectDB = require('./src/config/db');
+const errorHandler = require('./src/middleware/errorHandler');
 
 // Load environment variables
 dotenv.config();
@@ -39,14 +39,16 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// CORS middleware - FIXED formatting
+// CORS middleware - UPDATED: Add production URLs
 app.use(cors({
   origin: [
     'http://localhost:5173', 
     'http://127.0.0.1:5173',
     'http://localhost:3000',
-    'http://127.0.0.1:3000'
-  ],
+    'http://127.0.0.1:3000',
+    // Add your frontend domain here when you deploy it
+    process.env.CLIENT_URL
+  ].filter(Boolean), // Remove undefined values
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: [
@@ -66,14 +68,14 @@ app.options('*', cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Import routes
-const authRoutes = require('./route/authRoutes');
-const productRoutes = require('./route/productRoutes');
-const cartRoutes = require('./route/cartRoutes');
-const orderRoutes = require('./route/orderRoutes');
-const userRoutes = require('./route/userRoutes');
-const paymentRoutes = require('./route/paymentRoutes');
-const adminRoutes = require('./route/adminRoutes');
+// Import routes - UPDATED: Add src/ prefix
+const authRoutes = require('./src/route/authRoutes');
+const productRoutes = require('./src/route/productRoutes');
+const cartRoutes = require('./src/route/cartRoutes');
+const orderRoutes = require('./src/route/orderRoutes');
+const userRoutes = require('./src/route/userRoutes');
+const paymentRoutes = require('./src/route/paymentRoutes');
+const adminRoutes = require('./src/route/adminRoutes');
 
 // Mount routes
 app.use('/api/auth', authRoutes);
@@ -115,14 +117,15 @@ app.all('*', (req, res) => {
 // Error handling middleware (should be last)
 app.use(errorHandler);
 
-// Cleanup orders utility
-require('./utils/cleanupOrders');
+// Cleanup orders utility - UPDATED: Add src/ prefix
+require('./src/utils/cleanupOrders');
 
+// CRITICAL: Use process.env.PORT and bind to 0.0.0.0 for Render
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server is running on port ${PORT}`);
-  console.log(`🌐 Frontend URL: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+  console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
 });
 
