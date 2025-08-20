@@ -2,19 +2,9 @@
   "name": "forever-ecommerce-server",
   "version": "1.0.0",
   "description": "Forever E-Commerce Backend Server",
-  "main": "src/server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "test-r2": "node src/utils/testR2Credentials.js",
-    "upload-images": "node src/utils/uploadImagesToR2.js",
-    "seed": "node src/utils/seedWithR2Images.js",
-    "seed:placeholders": "node src/utils/seedWithPlaceholders.js",
-    "clear-carts": "node src/utils/clearCartData.js",
-    "clear-invalid-carts": "node src/utils/clearInvalidCartData.js",
-    "complete-reset": "node src/utils/completeReset.js",
-    "full-setup": "npm run clear-invalid-carts && npm run seed"
+    "start": "node server.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.859.0",
