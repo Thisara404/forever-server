@@ -1,0 +1,446 @@
+[
+  {
+    "originalName": "about_img.png",
+    "fileName": "about_img",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/about_img.jpg",
+    "r2Key": "products/about_img.jpg"
+  },
+  {
+    "originalName": "bin_icon.png",
+    "fileName": "bin_icon",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/bin_icon.jpg",
+    "r2Key": "products/bin_icon.jpg"
+  },
+  {
+    "originalName": "cart_icon.png",
+    "fileName": "cart_icon",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/cart_icon.jpg",
+    "r2Key": "products/cart_icon.jpg"
+  },
+  {
+    "originalName": "contact_img.png",
+    "fileName": "contact_img",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/contact_img.jpg",
+    "r2Key": "products/contact_img.jpg"
+  },
+  {
+    "originalName": "cross_icon.png",
+    "fileName": "cross_icon",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/cross_icon.jpg",
+    "r2Key": "products/cross_icon.jpg"
+  },
+  {
+    "originalName": "dropdown_icon.png",
+    "fileName": "dropdown_icon",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/dropdown_icon.jpg",
+    "r2Key": "products/dropdown_icon.jpg"
+  },
+  {
+    "originalName": "exchange_icon.png",
+    "fileName": "exchange_icon",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/exchange_icon.jpg",
+    "r2Key": "products/exchange_icon.jpg"
+  },
+  {
+    "originalName": "hero_img.png",
+    "fileName": "hero_img",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/hero_img.jpg",
+    "r2Key": "products/hero_img.jpg"
+  },
+  {
+    "originalName": "logo.png",
+    "fileName": "logo",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/logo.jpg",
+    "r2Key": "products/logo.jpg"
+  },
+  {
+    "originalName": "menu_icon.png",
+    "fileName": "menu_icon",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/menu_icon.jpg",
+    "r2Key": "products/menu_icon.jpg"
+  },
+  {
+    "originalName": "profile_icon.png",
+    "fileName": "profile_icon",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/profile_icon.jpg",
+    "r2Key": "products/profile_icon.jpg"
+  },
+  {
+    "originalName": "p_img1.png",
+    "fileName": "p_img1",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img1.jpg",
+    "r2Key": "products/p_img1.jpg"
+  },
+  {
+    "originalName": "p_img10.png",
+    "fileName": "p_img10",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img10.jpg",
+    "r2Key": "products/p_img10.jpg"
+  },
+  {
+    "originalName": "p_img11.png",
+    "fileName": "p_img11",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img11.jpg",
+    "r2Key": "products/p_img11.jpg"
+  },
+  {
+    "originalName": "p_img12.png",
+    "fileName": "p_img12",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img12.jpg",
+    "r2Key": "products/p_img12.jpg"
+  },
+  {
+    "originalName": "p_img13.png",
+    "fileName": "p_img13",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img13.jpg",
+    "r2Key": "products/p_img13.jpg"
+  },
+  {
+    "originalName": "p_img14.png",
+    "fileName": "p_img14",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img14.jpg",
+    "r2Key": "products/p_img14.jpg"
+  },
+  {
+    "originalName": "p_img15.png",
+    "fileName": "p_img15",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img15.jpg",
+    "r2Key": "products/p_img15.jpg"
+  },
+  {
+    "originalName": "p_img16.png",
+    "fileName": "p_img16",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img16.jpg",
+    "r2Key": "products/p_img16.jpg"
+  },
+  {
+    "originalName": "p_img17.png",
+    "fileName": "p_img17",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img17.jpg",
+    "r2Key": "products/p_img17.jpg"
+  },
+  {
+    "originalName": "p_img18.png",
+    "fileName": "p_img18",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img18.jpg",
+    "r2Key": "products/p_img18.jpg"
+  },
+  {
+    "originalName": "p_img19.png",
+    "fileName": "p_img19",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img19.jpg",
+    "r2Key": "products/p_img19.jpg"
+  },
+  {
+    "originalName": "p_img2.png",
+    "fileName": "p_img2",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img2.jpg",
+    "r2Key": "products/p_img2.jpg"
+  },
+  {
+    "originalName": "p_img20.png",
+    "fileName": "p_img20",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img20.jpg",
+    "r2Key": "products/p_img20.jpg"
+  },
+  {
+    "originalName": "p_img21.png",
+    "fileName": "p_img21",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img21.jpg",
+    "r2Key": "products/p_img21.jpg"
+  },
+  {
+    "originalName": "p_img22.png",
+    "fileName": "p_img22",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img22.jpg",
+    "r2Key": "products/p_img22.jpg"
+  },
+  {
+    "originalName": "p_img23.png",
+    "fileName": "p_img23",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img23.jpg",
+    "r2Key": "products/p_img23.jpg"
+  },
+  {
+    "originalName": "p_img24.png",
+    "fileName": "p_img24",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img24.jpg",
+    "r2Key": "products/p_img24.jpg"
+  },
+  {
+    "originalName": "p_img25.png",
+    "fileName": "p_img25",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img25.jpg",
+    "r2Key": "products/p_img25.jpg"
+  },
+  {
+    "originalName": "p_img26.png",
+    "fileName": "p_img26",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img26.jpg",
+    "r2Key": "products/p_img26.jpg"
+  },
+  {
+    "originalName": "p_img27.png",
+    "fileName": "p_img27",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img27.jpg",
+    "r2Key": "products/p_img27.jpg"
+  },
+  {
+    "originalName": "p_img28.png",
+    "fileName": "p_img28",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img28.jpg",
+    "r2Key": "products/p_img28.jpg"
+  },
+  {
+    "originalName": "p_img29.png",
+    "fileName": "p_img29",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img29.jpg",
+    "r2Key": "products/p_img29.jpg"
+  },
+  {
+    "originalName": "p_img2_1.png",
+    "fileName": "p_img2_1",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img2_1.jpg",
+    "r2Key": "products/p_img2_1.jpg"
+  },
+  {
+    "originalName": "p_img2_2.png",
+    "fileName": "p_img2_2",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img2_2.jpg",
+    "r2Key": "products/p_img2_2.jpg"
+  },
+  {
+    "originalName": "p_img2_3.png",
+    "fileName": "p_img2_3",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img2_3.jpg",
+    "r2Key": "products/p_img2_3.jpg"
+  },
+  {
+    "originalName": "p_img2_4.png",
+    "fileName": "p_img2_4",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img2_4.jpg",
+    "r2Key": "products/p_img2_4.jpg"
+  },
+  {
+    "originalName": "p_img3.png",
+    "fileName": "p_img3",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img3.jpg",
+    "r2Key": "products/p_img3.jpg"
+  },
+  {
+    "originalName": "p_img30.png",
+    "fileName": "p_img30",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img30.jpg",
+    "r2Key": "products/p_img30.jpg"
+  },
+  {
+    "originalName": "p_img31.png",
+    "fileName": "p_img31",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img31.jpg",
+    "r2Key": "products/p_img31.jpg"
+  },
+  {
+    "originalName": "p_img32.png",
+    "fileName": "p_img32",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img32.jpg",
+    "r2Key": "products/p_img32.jpg"
+  },
+  {
+    "originalName": "p_img33.png",
+    "fileName": "p_img33",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img33.jpg",
+    "r2Key": "products/p_img33.jpg"
+  },
+  {
+    "originalName": "p_img34.png",
+    "fileName": "p_img34",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img34.jpg",
+    "r2Key": "products/p_img34.jpg"
+  },
+  {
+    "originalName": "p_img35.png",
+    "fileName": "p_img35",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img35.jpg",
+    "r2Key": "products/p_img35.jpg"
+  },
+  {
+    "originalName": "p_img36.png",
+    "fileName": "p_img36",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img36.jpg",
+    "r2Key": "products/p_img36.jpg"
+  },
+  {
+    "originalName": "p_img37.png",
+    "fileName": "p_img37",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img37.jpg",
+    "r2Key": "products/p_img37.jpg"
+  },
+  {
+    "originalName": "p_img38.png",
+    "fileName": "p_img38",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img38.jpg",
+    "r2Key": "products/p_img38.jpg"
+  },
+  {
+    "originalName": "p_img39.png",
+    "fileName": "p_img39",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img39.jpg",
+    "r2Key": "products/p_img39.jpg"
+  },
+  {
+    "originalName": "p_img4.png",
+    "fileName": "p_img4",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img4.jpg",
+    "r2Key": "products/p_img4.jpg"
+  },
+  {
+    "originalName": "p_img40.png",
+    "fileName": "p_img40",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img40.jpg",
+    "r2Key": "products/p_img40.jpg"
+  },
+  {
+    "originalName": "p_img41.png",
+    "fileName": "p_img41",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img41.jpg",
+    "r2Key": "products/p_img41.jpg"
+  },
+  {
+    "originalName": "p_img42.png",
+    "fileName": "p_img42",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img42.jpg",
+    "r2Key": "products/p_img42.jpg"
+  },
+  {
+    "originalName": "p_img43.png",
+    "fileName": "p_img43",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img43.jpg",
+    "r2Key": "products/p_img43.jpg"
+  },
+  {
+    "originalName": "p_img44.png",
+    "fileName": "p_img44",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img44.jpg",
+    "r2Key": "products/p_img44.jpg"
+  },
+  {
+    "originalName": "p_img45.png",
+    "fileName": "p_img45",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img45.jpg",
+    "r2Key": "products/p_img45.jpg"
+  },
+  {
+    "originalName": "p_img46.png",
+    "fileName": "p_img46",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img46.jpg",
+    "r2Key": "products/p_img46.jpg"
+  },
+  {
+    "originalName": "p_img47.png",
+    "fileName": "p_img47",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img47.jpg",
+    "r2Key": "products/p_img47.jpg"
+  },
+  {
+    "originalName": "p_img48.png",
+    "fileName": "p_img48",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img48.jpg",
+    "r2Key": "products/p_img48.jpg"
+  },
+  {
+    "originalName": "p_img49.png",
+    "fileName": "p_img49",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img49.jpg",
+    "r2Key": "products/p_img49.jpg"
+  },
+  {
+    "originalName": "p_img5.png",
+    "fileName": "p_img5",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img5.jpg",
+    "r2Key": "products/p_img5.jpg"
+  },
+  {
+    "originalName": "p_img50.png",
+    "fileName": "p_img50",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img50.jpg",
+    "r2Key": "products/p_img50.jpg"
+  },
+  {
+    "originalName": "p_img51.png",
+    "fileName": "p_img51",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img51.jpg",
+    "r2Key": "products/p_img51.jpg"
+  },
+  {
+    "originalName": "p_img52.png",
+    "fileName": "p_img52",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img52.jpg",
+    "r2Key": "products/p_img52.jpg"
+  },
+  {
+    "originalName": "p_img6.png",
+    "fileName": "p_img6",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img6.jpg",
+    "r2Key": "products/p_img6.jpg"
+  },
+  {
+    "originalName": "p_img7.png",
+    "fileName": "p_img7",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img7.jpg",
+    "r2Key": "products/p_img7.jpg"
+  },
+  {
+    "originalName": "p_img8.png",
+    "fileName": "p_img8",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img8.jpg",
+    "r2Key": "products/p_img8.jpg"
+  },
+  {
+    "originalName": "p_img9.png",
+    "fileName": "p_img9",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/p_img9.jpg",
+    "r2Key": "products/p_img9.jpg"
+  },
+  {
+    "originalName": "quality_icon.png",
+    "fileName": "quality_icon",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/quality_icon.jpg",
+    "r2Key": "products/quality_icon.jpg"
+  },
+  {
+    "originalName": "razorpay_logo.png",
+    "fileName": "razorpay_logo",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/razorpay_logo.jpg",
+    "r2Key": "products/razorpay_logo.jpg"
+  },
+  {
+    "originalName": "search_icon.png",
+    "fileName": "search_icon",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/search_icon.jpg",
+    "r2Key": "products/search_icon.jpg"
+  },
+  {
+    "originalName": "star_dull_icon.png",
+    "fileName": "star_dull_icon",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/star_dull_icon.jpg",
+    "r2Key": "products/star_dull_icon.jpg"
+  },
+  {
+    "originalName": "star_icon.png",
+    "fileName": "star_icon",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/star_icon.jpg",
+    "r2Key": "products/star_icon.jpg"
+  },
+  {
+    "originalName": "stripe_logo.png",
+    "fileName": "stripe_logo",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/stripe_logo.jpg",
+    "r2Key": "products/stripe_logo.jpg"
+  },
+  {
+    "originalName": "support_img.png",
+    "fileName": "support_img",
+    "r2Url": "https://pub-326eb66678484b22b0b533f7876b4e55.r2.dev/products/support_img.jpg",
+    "r2Key": "products/support_img.jpg"
+  }
+]
