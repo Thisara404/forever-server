@@ -3,8 +3,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const connectDB = require('./config/db');
-const errorHandler = require('./middleware/errorHandler');
+const connectDB = require('./src/config/db');
+const errorHandler = require('./src/middleware/errorHandler');
 
 // Load environment variables
 dotenv.config();
@@ -78,13 +78,13 @@ app.use('/api/', (req, res, next) => {
 });
 
 // Import routes
-const authRoutes = require('./route/authRoutes');
-const productRoutes = require('./route/productRoutes');
-const cartRoutes = require('./route/cartRoutes');
-const orderRoutes = require('./route/orderRoutes');
-const userRoutes = require('./route/userRoutes');
-const paymentRoutes = require('./route/paymentRoutes');
-const adminRoutes = require('./route/adminRoutes');
+const authRoutes = require('./src/route/authRoutes');
+const productRoutes = require('./src/route/productRoutes');
+const cartRoutes = require('./src/route/cartRoutes');
+const orderRoutes = require('./src/route/orderRoutes');
+const userRoutes = require('./src/route/userRoutes');
+const paymentRoutes = require('./src/route/paymentRoutes');
+const adminRoutes = require('./src/route/adminRoutes');
 
 // Mount routes
 app.use('/api/auth', authRoutes);
@@ -129,7 +129,7 @@ app.all('*', (req, res) => {
 app.use(errorHandler);
 
 // Cleanup orders utility
-require('./utils/cleanupOrders');
+require('./src/utils/cleanupOrders');
 
 const PORT = process.env.PORT || 5000;
 
