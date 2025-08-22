@@ -42,24 +42,16 @@ const limiter = rateLimit({
   },
 });
 
-// CORS middleware - FIXED formatting
+// CORS middleware - Updated for client connection
 app.use(cors({
   origin: [
-    'http://localhost:5173', 
-    'http://127.0.0.1:5173',
     'http://localhost:3000',
-    'http://127.0.0.1:3000'
+    'http://localhost:5173', // Vite dev server
+    'https://forever-ezr7.onrender.com', // Your deployed frontend
   ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: [
-    'Content-Type', 
-    'Authorization', 
-    'X-Requested-With',
-    'Accept',
-    'Origin'
-  ],
-  optionsSuccessStatus: 200
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'token']
 }));
 
 // Add preflight handling
