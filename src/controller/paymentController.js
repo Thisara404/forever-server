@@ -58,31 +58,42 @@ const createStripePaymentIntent = async (req, res) => {
       });
     }
 
-    // SECURITY: Validate amount matches order total
-    if (parseFloat(amount) !== order.totalAmount) {
+    // FIXED: Proper amount validation
+    const orderTotal = parseFloat(order.totalAmount);
+    const paymentAmount = parseFloat(amount);
+
+    console.log("💰 Amount validation:", {
+      orderTotal,
+      paymentAmount,
+      match: orderTotal === paymentAmount,
+    });
+
+    if (paymentAmount !== orderTotal) {
       console.warn(
-        `🚨 Amount mismatch: Expected ${order.totalAmount}, received ${amount}`
+        `🚨 Amount mismatch: Expected ${orderTotal}, received ${paymentAmount}`
       );
       return res.status(400).json({
         success: false,
-        message: "Payment amount does not match order total",
+        message: `Payment amount (${paymentAmount}) does not match order total (${orderTotal})`,
+        expected: orderTotal,
+        received: paymentAmount,
       });
     }
 
     // Check minimum amount for Stripe
     const minimumAmountLKR = 200;
-    if (amount < minimumAmountLKR) {
+    if (paymentAmount < minimumAmountLKR) {
       return res.status(400).json({
         success: false,
         message: `Stripe payments require a minimum amount of LKR ${minimumAmountLKR}`,
         minAmount: minimumAmountLKR,
-        currentAmount: amount,
+        currentAmount: paymentAmount,
         suggestedMethods: ["payhere", "cod"],
       });
     }
 
-    // Convert amount to cents for Stripe
-    const amountInCents = Math.round(parseFloat(amount) * 100);
+    // Convert amount to cents for Stripe (LKR to cents)
+    const amountInCents = Math.round(paymentAmount * 100);
 
     console.log("Creating Stripe payment intent:", {
       amount: amountInCents,
@@ -110,7 +121,7 @@ const createStripePaymentIntent = async (req, res) => {
       success: true,
       clientSecret: paymentIntent.client_secret,
       paymentIntentId: paymentIntent.id,
-      orderId: orderId, // Safe to return since ownership is verified
+      orderId: orderId,
     });
   } catch (error) {
     console.error("❌ Stripe payment intent error:", error);
@@ -515,11 +526,30 @@ const processStripePayment = async (req, res) => {
       });
     }
 
-    // Validate amount
-    if (parseFloat(amount) / 100 !== order.totalAmount) {
+    // FIXED: Proper amount validation
+    const orderTotal = parseFloat(order.totalAmount);
+    const paymentAmount = parseFloat(amount);
+
+    console.log("💰 Payment details:", {
+      orderId,
+      amount,
+      amountType: typeof amount,
+    });
+
+    console.log("💰 Amount comparison:", {
+      orderTotal: order.totalAmount,
+      orderTotalType: typeof order.totalAmount,
+      paymentAmount: parseFloat(amount),
+      paymentAmountType: typeof parseFloat(amount),
+      isEqual: parseFloat(amount) === order.totalAmount,
+    });
+
+    if (paymentAmount !== orderTotal) {
       return res.status(400).json({
         success: false,
         message: "Payment amount does not match order total",
+        expected: orderTotal,
+        received: paymentAmount,
       });
     }
 
@@ -538,7 +568,7 @@ const processStripePayment = async (req, res) => {
         status: "succeeded",
         update_time: new Date().toISOString(),
         email_address: req.user.email,
-        amount_paid: amount / 100,
+        amount_paid: paymentAmount, // ✅ Store in LKR
         card_last4: cardNumber.slice(-4),
       };
 
