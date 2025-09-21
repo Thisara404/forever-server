@@ -1,25 +1,71 @@
-const stripe = require('../config/stripe');
-const Order = require('../model/Order');
-const Cart = require('../model/Cart');
-const Product = require('../model/Product');
-const { payHereConfig, generatePayHereHash, verifyPayHereHash } = require('../config/payhere');
-const { confirmOrderPayment, cancelPaymentPendingOrder } = require('./orderController');
+const stripe = require("../config/stripe");
+const Order = require("../model/Order");
+const Cart = require("../model/Cart");
+const Product = require("../model/Product");
+const {
+  payHereConfig,
+  generatePayHereHash,
+  verifyPayHereHash,
+} = require("../config/payhere");
+const {
+  confirmOrderPayment,
+  cancelPaymentPendingOrder,
+} = require("./orderController");
 
-// @desc    Create Stripe Payment Intent
+// @desc    Create Stripe Payment Intent (JWT Token Only)
 // @route   POST /api/payments/stripe/create-payment-intent
 // @access  Private
 const createStripePaymentIntent = async (req, res) => {
   try {
-    console.log('Stripe request received:', req.body);
-    
-    const { amount, currency = 'lkr', orderId } = req.body;
+    console.log("Stripe request received:", req.body);
 
-    // Validate inputs
-    if (!amount || amount <= 0) {
+    const { orderId, amount, currency = "lkr" } = req.body;
+
+    // SECURITY: Validate inputs
+    if (!orderId || !amount || amount <= 0) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid amount provided',
-        debug: { amount, type: typeof amount }
+        message: "Order ID and valid amount are required",
+      });
+    }
+
+    // SECURITY: Find order and validate ownership through JWT
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    // SECURITY: Verify order belongs to authenticated user
+    if (order.userId.toString() !== req.user._id.toString()) {
+      console.warn(
+        `🚨 Unauthorized payment attempt: User ${req.user._id} tried to pay for order ${orderId} belonging to ${order.userId}`
+      );
+      return res.status(403).json({
+        success: false,
+        message: "Access denied",
+      });
+    }
+
+    // SECURITY: Validate order status
+    if (order.orderStatus !== "payment_pending") {
+      return res.status(400).json({
+        success: false,
+        message: "Order is not available for payment",
+        currentStatus: order.orderStatus,
+      });
+    }
+
+    // SECURITY: Validate amount matches order total
+    if (parseFloat(amount) !== order.totalAmount) {
+      console.warn(
+        `🚨 Amount mismatch: Expected ${order.totalAmount}, received ${amount}`
+      );
+      return res.status(400).json({
+        success: false,
+        message: "Payment amount does not match order total",
       });
     }
 
@@ -28,51 +74,21 @@ const createStripePaymentIntent = async (req, res) => {
     if (amount < minimumAmountLKR) {
       return res.status(400).json({
         success: false,
-        message: `Stripe payments require a minimum amount of LKR ${minimumAmountLKR}. Your order total is LKR ${amount}. Please use PayHere or Cash on Delivery for smaller amounts.`,
+        message: `Stripe payments require a minimum amount of LKR ${minimumAmountLKR}`,
         minAmount: minimumAmountLKR,
         currentAmount: amount,
-        suggestedMethods: ['payhere', 'cod']
-      });
-    }
-
-    if (!orderId) {
-      return res.status(400).json({
-        success: false,
-        message: 'Order ID is required'
-      });
-    }
-
-    // Verify the order exists and belongs to user
-    const order = await Order.findById(orderId);
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: 'Order not found'
-      });
-    }
-
-    if (order.userId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
-        success: false,
-        message: 'Access denied'
-      });
-    }
-
-    // **NEW: Check if order is in payment_pending status**
-    if (order.orderStatus !== 'payment_pending') {
-      return res.status(400).json({
-        success: false,
-        message: 'Order is not in payment pending status'
+        suggestedMethods: ["payhere", "cod"],
       });
     }
 
     // Convert amount to cents for Stripe
     const amountInCents = Math.round(parseFloat(amount) * 100);
-    
-    console.log('Creating Stripe payment intent:', {
+
+    console.log("Creating Stripe payment intent:", {
       amount: amountInCents,
       currency: currency.toLowerCase(),
-      orderId
+      orderId,
+      userId: req.user._id,
     });
 
     const paymentIntent = await stripe.paymentIntents.create({
@@ -80,43 +96,49 @@ const createStripePaymentIntent = async (req, res) => {
       currency: currency.toLowerCase(),
       metadata: {
         orderId: orderId,
-        userId: req.user._id.toString()
+        userId: req.user._id.toString(),
+        userEmail: req.user.email,
       },
       automatic_payment_methods: {
         enabled: true,
       },
     });
 
-    console.log('Payment intent created successfully:', paymentIntent.id);
+    console.log("✅ Payment intent created successfully:", paymentIntent.id);
 
     res.status(200).json({
       success: true,
       clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id
+      paymentIntentId: paymentIntent.id,
+      orderId: orderId, // Safe to return since ownership is verified
     });
-
   } catch (error) {
-    console.error('Stripe payment intent error:', error);
-    
-    if (error.type === 'StripeInvalidRequestError' && error.code === 'amount_too_small') {
+    console.error("❌ Stripe payment intent error:", error);
+
+    if (
+      error.type === "StripeInvalidRequestError" &&
+      error.code === "amount_too_small"
+    ) {
       return res.status(400).json({
         success: false,
-        message: 'Amount is too small for Stripe payments. Please use PayHere or Cash on Delivery for smaller amounts.',
-        error: error.message,
-        suggestedMethods: ['payhere', 'cod'],
-        minAmount: 200
+        message: "Amount is too small for Stripe payments",
+        suggestedMethods: ["payhere", "cod"],
+        minAmount: 200,
       });
     }
 
     res.status(500).json({
       success: false,
-      message: 'Failed to create payment intent',
-      error: error.message
+      message: "Failed to create payment intent",
+      error:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Payment service unavailable",
     });
   }
 };
 
-// @desc    Confirm Stripe Payment
+// @desc    Confirm Stripe Payment (Enhanced Security)
 // @route   POST /api/payments/stripe/confirm
 // @access  Private
 const confirmStripePayment = async (req, res) => {
@@ -126,46 +148,86 @@ const confirmStripePayment = async (req, res) => {
     if (!paymentIntentId || !orderId) {
       return res.status(400).json({
         success: false,
-        message: 'Payment intent ID and order ID are required'
+        message: "Payment intent ID and order ID are required",
       });
     }
 
-    // Retrieve payment intent from Stripe
+    // SECURITY: Validate order ownership again
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    if (order.userId.toString() !== req.user._id.toString()) {
+      console.warn(
+        `🚨 Unauthorized payment confirmation: User ${req.user._id} tried to confirm payment for order ${orderId}`
+      );
+      return res.status(403).json({
+        success: false,
+        message: "Access denied",
+      });
+    }
+
+    // Retrieve and validate payment intent from Stripe
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
-    if (paymentIntent.status === 'succeeded') {
-      // **NEW: Use the new confirmOrderPayment function**
+    // SECURITY: Verify payment intent metadata matches
+    if (
+      paymentIntent.metadata.orderId !== orderId ||
+      paymentIntent.metadata.userId !== req.user._id.toString()
+    ) {
+      console.warn(`🚨 Payment metadata mismatch for order ${orderId}`);
+      return res.status(400).json({
+        success: false,
+        message: "Payment verification failed",
+      });
+    }
+
+    if (paymentIntent.status === "succeeded") {
       const paymentInfo = {
         id: paymentIntent.id,
         status: paymentIntent.status,
         update_time: new Date().toISOString(),
-        email_address: req.user.email
+        email_address: req.user.email,
+        amount_paid: paymentIntent.amount / 100,
       };
 
-      const order = await confirmOrderPayment(orderId, paymentInfo);
+      const confirmedOrder = await confirmOrderPayment(orderId, paymentInfo);
+
+      console.log(
+        `✅ Payment confirmed for order ${orderId} by user ${req.user._id}`
+      );
 
       res.status(200).json({
         success: true,
-        message: 'Payment confirmed successfully',
-        order
+        message: "Payment confirmed successfully",
+        orderId: confirmedOrder._id,
       });
     } else {
-      // **NEW: Cancel the order if payment failed**
       await cancelPaymentPendingOrder(orderId);
-      
+
+      console.warn(
+        `❌ Payment failed for order ${orderId}: ${paymentIntent.status}`
+      );
+
       res.status(400).json({
         success: false,
-        message: 'Payment not successful',
-        status: paymentIntent.status
+        message: "Payment not successful",
+        status: paymentIntent.status,
       });
     }
-
   } catch (error) {
-    console.error('Stripe payment confirmation error:', error);
+    console.error("❌ Stripe payment confirmation error:", error);
     res.status(500).json({
       success: false,
-      message: 'Payment confirmation failed',
-      error: error.message
+      message: "Payment confirmation failed",
+      error:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Payment service error",
     });
   }
 };
@@ -183,10 +245,10 @@ const payHereNotification = async (req, res) => {
       method,
       status_message,
       card_holder_name,
-      card_no
+      card_no,
     } = req.body;
 
-    console.log('PayHere Notification:', req.body);
+    console.log("PayHere Notification:", req.body);
 
     // Verify the hash
     const isValidHash = verifyPayHereHash({
@@ -196,41 +258,46 @@ const payHereNotification = async (req, res) => {
       payhere_currency,
       status_code,
       md5sig,
-      merchant_secret: payHereConfig.merchant_secret
+      merchant_secret: payHereConfig.merchant_secret,
     });
 
     if (!isValidHash) {
-      console.error('Invalid PayHere hash');
-      return res.status(400).send('Invalid hash');
+      console.error("Invalid PayHere hash");
+      return res.status(400).send("Invalid hash");
     }
 
-    if (status_code === '2') { // Success
+    if (status_code === "2") {
+      // Success
       // **NEW: Use confirmOrderPayment function**
       const paymentInfo = {
         id: `payhere_${Date.now()}`,
-        status: 'completed',
+        status: "completed",
         update_time: new Date().toISOString(),
         email_address: order.shippingAddress.email,
         method: method,
         card_holder_name: card_holder_name,
-        card_no: card_no ? `****-****-****-${card_no.slice(-4)}` : null
+        card_no: card_no ? `****-****-****-${card_no.slice(-4)}` : null,
       };
 
       await confirmOrderPayment(order_id, paymentInfo);
-      console.log('Payment successful for order:', order_id);
-
-    } else { // Failed or cancelled
+      console.log("Payment successful for order:", order_id);
+    } else {
+      // Failed or cancelled
       // **NEW: Cancel the order**
       await cancelPaymentPendingOrder(order_id);
-      console.log('Payment failed for order:', order_id, 'Message:', status_message);
+      console.log(
+        "Payment failed for order:",
+        order_id,
+        "Message:",
+        status_message
+      );
     }
 
     // Send success response to PayHere
-    res.status(200).send('OK');
-
+    res.status(200).send("OK");
   } catch (error) {
-    console.error('PayHere notification error:', error);
-    res.status(500).send('Internal Server Error');
+    console.error("PayHere notification error:", error);
+    res.status(500).send("Internal Server Error");
   }
 };
 
@@ -239,15 +306,15 @@ const payHereNotification = async (req, res) => {
 // @access  Private
 const createPayHerePayment = async (req, res) => {
   try {
-    console.log('PayHere payment request:', req.body);
-    
-    const { orderId, amount, currency = 'LKR' } = req.body;
+    console.log("PayHere payment request:", req.body);
+
+    const { orderId, amount, currency = "LKR" } = req.body;
 
     // Validate PayHere configuration
     if (!payHereConfig.merchant_id || !payHereConfig.merchant_secret) {
       return res.status(500).json({
         success: false,
-        message: 'PayHere merchant configuration is missing'
+        message: "PayHere merchant configuration is missing",
       });
     }
 
@@ -256,7 +323,7 @@ const createPayHerePayment = async (req, res) => {
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: 'Order not found'
+        message: "Order not found",
       });
     }
 
@@ -264,20 +331,20 @@ const createPayHerePayment = async (req, res) => {
     if (order.userId.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied'
+        message: "Access denied",
       });
     }
 
     // Format amount properly
     const formattedAmount = parseFloat(amount).toFixed(2);
-    
+
     // Generate PayHere payment data
     const paymentData = {
       merchant_id: payHereConfig.merchant_id,
       order_id: orderId,
       amount: formattedAmount,
       currency: currency,
-      items: order.items.map(item => item.name).join(', '),
+      items: order.items.map((item) => item.name).join(", "),
       first_name: order.shippingAddress.firstName,
       last_name: order.shippingAddress.lastName,
       email: order.shippingAddress.email,
@@ -287,7 +354,7 @@ const createPayHerePayment = async (req, res) => {
       country: order.shippingAddress.country,
       return_url: payHereConfig.return_url,
       cancel_url: payHereConfig.cancel_url,
-      notify_url: payHereConfig.notify_url
+      notify_url: payHereConfig.notify_url,
     };
 
     // Generate hash
@@ -296,31 +363,32 @@ const createPayHerePayment = async (req, res) => {
       order_id: paymentData.order_id,
       amount: paymentData.amount,
       currency: paymentData.currency,
-      merchant_secret: payHereConfig.merchant_secret
+      merchant_secret: payHereConfig.merchant_secret,
     });
 
     paymentData.hash = hash;
 
-    console.log('PayHere payment data generated:', {
+    console.log("PayHere payment data generated:", {
       merchant_id: paymentData.merchant_id,
       order_id: paymentData.order_id,
       amount: paymentData.amount,
-      hash: hash
+      hash: hash,
     });
 
     // Return payment data for frontend
     res.status(200).json({
       success: true,
       paymentData,
-      paymentUrl: payHereConfig.sandbox ? payHereConfig.sandbox_url : payHereConfig.live_url
+      paymentUrl: payHereConfig.sandbox
+        ? payHereConfig.sandbox_url
+        : payHereConfig.live_url,
     });
-
   } catch (error) {
-    console.error('PayHere payment creation error:', error);
+    console.error("PayHere payment creation error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to create PayHere payment',
-      error: error.message
+      message: "Failed to create PayHere payment",
+      error: error.message,
     });
   }
 };
@@ -336,7 +404,7 @@ const processCODOrder = async (req, res) => {
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: 'Order not found'
+        message: "Order not found",
       });
     }
 
@@ -344,17 +412,17 @@ const processCODOrder = async (req, res) => {
     if (order.userId.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied'
+        message: "Access denied",
       });
     }
 
     // Update order status for COD
-    order.orderStatus = 'confirmed';
+    order.orderStatus = "confirmed";
     order.paymentInfo = {
       id: `cod_${Date.now()}`,
-      status: 'pending',
+      status: "pending",
       update_time: new Date().toISOString(),
-      email_address: req.user.email
+      email_address: req.user.email,
     };
 
     await order.save();
@@ -367,16 +435,15 @@ const processCODOrder = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'COD order processed successfully',
-      order
+      message: "COD order processed successfully",
+      order,
     });
-
   } catch (error) {
-    console.error('COD processing error:', error);
+    console.error("COD processing error:", error);
     res.status(500).json({
       success: false,
-      message: 'COD order processing failed',
-      error: error.message
+      message: "COD order processing failed",
+      error: error.message,
     });
   }
 };
@@ -388,11 +455,13 @@ const getPaymentStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
 
-    const order = await Order.findById(orderId).select('isPaid paidAt paymentMethod paymentInfo orderStatus');
+    const order = await Order.findById(orderId).select(
+      "isPaid paidAt paymentMethod paymentInfo orderStatus"
+    );
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: 'Order not found'
+        message: "Order not found",
       });
     }
 
@@ -403,24 +472,115 @@ const getPaymentStatus = async (req, res) => {
         paidAt: order.paidAt,
         paymentMethod: order.paymentMethod,
         paymentInfo: order.paymentInfo,
-        orderStatus: order.orderStatus
-      }
+        orderStatus: order.orderStatus,
+      },
     });
-
   } catch (error) {
-    console.error('Payment status error:', error);
+    console.error("Payment status error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to get payment status'
+      message: "Failed to get payment status",
     });
   }
 };
 
+// Add this new function for simplified Stripe processing
+const processStripePayment = async (req, res) => {
+  try {
+    const { orderId, amount, cardNumber, expiryMonth, expiryYear, cvc, zip } =
+      req.body;
+
+    console.log("Processing Stripe payment for order:", orderId);
+
+    // SECURITY: Validate order ownership
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    if (order.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied",
+      });
+    }
+
+    if (order.orderStatus !== "payment_pending") {
+      return res.status(400).json({
+        success: false,
+        message: "Order is not available for payment",
+      });
+    }
+
+    // Validate amount
+    if (parseFloat(amount) / 100 !== order.totalAmount) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment amount does not match order total",
+      });
+    }
+
+    // For test cards, simulate payment processing
+    const testCards = [
+      "4242424242424242",
+      "5555555555554444",
+      "4000056655665556",
+    ];
+    const declineCards = ["4000000000000002", "4000000000009995"];
+
+    if (testCards.includes(cardNumber)) {
+      // Simulate successful payment
+      const paymentInfo = {
+        id: `stripe_sim_${Date.now()}`,
+        status: "succeeded",
+        update_time: new Date().toISOString(),
+        email_address: req.user.email,
+        amount_paid: amount / 100,
+        card_last4: cardNumber.slice(-4),
+      };
+
+      const confirmedOrder = await confirmOrderPayment(orderId, paymentInfo);
+
+      res.status(200).json({
+        success: true,
+        message: "Payment processed successfully",
+        orderId: confirmedOrder._id,
+      });
+    } else if (declineCards.includes(cardNumber)) {
+      await cancelPaymentPendingOrder(orderId);
+      res.status(400).json({
+        success: false,
+        message: "Your card was declined",
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Please use a valid test card number",
+      });
+    }
+  } catch (error) {
+    console.error("Stripe payment processing error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Payment processing failed",
+      error:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Payment service error",
+    });
+  }
+};
+
+// Update the module exports
 module.exports = {
   createStripePaymentIntent,
   confirmStripePayment,
   createPayHerePayment,
   payHereNotification,
   processCODOrder,
-  getPaymentStatus
+  getPaymentStatus,
+  processStripePayment, // Add this
 };

@@ -1,28 +1,30 @@
-const express = require('express');
+const express = require("express");
 const {
   createStripePaymentIntent,
   confirmStripePayment,
   createPayHerePayment,
   payHereNotification,
   processCODOrder,
-  getPaymentStatus
-} = require('../controller/paymentController');
-const { auth } = require('../middleware/auth');
+  getPaymentStatus,
+  processStripePayment, // Add this import
+} = require("../controller/paymentController");
+const { auth } = require("../middleware/auth");
 
 const router = express.Router();
 
 // Stripe routes (for international customers)
-router.post('/stripe/create-payment-intent', auth, createStripePaymentIntent);
-router.post('/stripe/confirm', auth, confirmStripePayment);
+router.post("/stripe/create-payment-intent", auth, createStripePaymentIntent);
+router.post("/stripe/confirm", auth, confirmStripePayment);
+router.post("/stripe/process", auth, processStripePayment); // Add this route
 
 // PayHere routes (primary for Sri Lanka)
-router.post('/payhere/create-payment', auth, createPayHerePayment);
-router.post('/payhere/notify', payHereNotification); // Public webhook
+router.post("/payhere/create-payment", auth, createPayHerePayment);
+router.post("/payhere/notify", payHereNotification); // Public webhook
 
 // COD routes
-router.post('/cod/process', auth, processCODOrder);
+router.post("/cod/process", auth, processCODOrder);
 
 // Payment status
-router.get('/status/:orderId', auth, getPaymentStatus);
+router.get("/status/:orderId", auth, getPaymentStatus);
 
 module.exports = router;
